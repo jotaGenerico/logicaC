@@ -1,0 +1,1 @@
+projeto desenvolvido no diretorio projetos na raiz, unifiquei independente do capitulos todos os projetos no mesmo local

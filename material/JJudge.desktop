@@ -1,0 +1,21 @@
+[Desktop Entry]
+Categories=Utility;Application;
+Comment[pt_BR]=Execute JJudge application
+Comment=Execute JJudge application
+Exec=java -jar /home/jota/Desktop/dev/logicaC/material/JJudge-1.31.0/dist/JJudge.jar
+GenericName[pt_BR]=
+GenericName=
+Icon=/home/jota/Desktop/dev/logicaC/material/JJudge-1.31.0/installer/juiz.ico
+MimeType=
+Name[pt_BR]=JJudge
+Name=JJudge
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=1.0
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

@@ -1,0 +1,4 @@
+teste as as 
+mais uma linha para o arquivo!
+inteiro escrito: 234324
+decimal escrito: 3.567800

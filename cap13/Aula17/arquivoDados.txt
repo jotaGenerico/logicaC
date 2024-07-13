@@ -1,0 +1,7 @@
+uma linha de dados do arquivo
+outra linha de dados do arquivo
+mais uma linha! a proxima sera um inteiro
+145
+a proxima, um float!
+19.67
+essa eh a ultima linha do arquivo!

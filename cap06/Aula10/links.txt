@@ -1,0 +1,2 @@
+lista funcoes matematicas
+https://en.cppreference.com/w/c/numeric/math

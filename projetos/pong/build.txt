@@ -1,0 +1,19 @@
+Executar o script
+
+Para limpar, compilar e executar:
+./build.sh
+
+Para limpar apenas:
+./build.sh -clean
+
+Para limpar e compilar:
+./build.sh -cleanAndCompile
+
+Para compilar apenas:
+./build.sh -compile
+
+Para compilar e executar:
+./build.sh -compileAndRun
+
+Para executar apenas:
+./build.sh -run
