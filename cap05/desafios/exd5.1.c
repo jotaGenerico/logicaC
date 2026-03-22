@@ -11,15 +11,14 @@ int main() {
     int m, n, p;
     int A[T][T], B[T][T], C[T][T];
 
-    printf("Digite as dimensões da primeira matriz (m x n):\n");
-    printf("Linhas: ");
+    printf("Digite as dimensoes da primeira matriz (m x n):\n");
+    printf("Linhas (m): ");
     scanf("%d", &m);
-    printf("Colunas: ");
+    printf("Colunas (n): ");
     scanf("%d", &n);
-    printf("Digite as dimensões da segunda matriz (n x p): \n");
-    printf("Linhas: ");
-    scanf("%d", &p);
-    printf("Colunas: ");
+
+    printf("Para a segunda matriz, as linhas devem ser %d.\n", n);
+    printf("Digite as colunas da segunda matriz (p): ");
     scanf("%d", &p);
 
     if (m < 1 || m > 10 || n < 1 || n > 10 || p < 1 || p > 10) {
@@ -27,12 +26,14 @@ int main() {
         return 1;
     }
 
+    printf("\n--- Matriz A ---\n");
     preencherMatriz(m, n, A);
+    printf("\n--- Matriz B ---\n");
     preencherMatriz(n, p, B);
 
     multiplicarMatrizes(m, n, p, A, B, C);
 
-    printf("Resultado da multiplicacao:\n");
+    printf("\nResultado da multiplicacao (Matriz %dx%d):\n", m, p);
     exibirMatriz(m, p, C);
 
     return 0;
@@ -42,7 +43,7 @@ void preencherMatriz(int linhas, int colunas, int matriz[T][T]) {
     printf("Preencha a matriz %dx%d:\n", linhas, colunas);
     for (int i = 0; i < linhas; i++) {
         for (int j = 0; j < colunas; j++) {
-            printf("[%d][%d]", i, j);
+            printf("[%d][%d]: ", i, j);
             scanf("%d", &matriz[i][j]);
         }
     }

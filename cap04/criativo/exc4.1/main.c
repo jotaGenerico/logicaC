@@ -3,7 +3,7 @@
  * @author Prof. Dr. David Buzatto
  * @brief Modelo para desenvolvimento de exercícios criativos usando a engine
  * de jogos Raylib (https://www.raylib.com/).
- * 
+ *
  * @copyright Copyright (c) 2024
  */
 
@@ -21,7 +21,7 @@ int main( void ) {
      *     - entrada de dados;
      *     - processamentos adicionais.
      ----------------------------------------------------*/
-    
+
     float notas[5];
     float maior = 0;
     float menor = 100;
@@ -82,7 +82,7 @@ int main( void ) {
     InitWindow( 600, 400, "Título da Janela" );
 
     // configura a quantidade de quatros por segundo da engine
-    SetTargetFPS( 60 );    
+    SetTargetFPS( 60 );
 
     // enquanto não é sinalizado que a janela deve ser fechada
     while ( !WindowShouldClose() ) {

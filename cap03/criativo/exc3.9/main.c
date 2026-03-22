@@ -22,8 +22,6 @@ int main( void ) {
      *     - processamentos adicionais.
      *     ----------------------------------------------------*/
 
-    int espaco = 20;
-
     //primeiro
     int iPrimeiroX = 0;
     int fPrimeiroX = 20;

@@ -23,10 +23,10 @@ int main(void)
      *     - processamentos adicionais.
      * ----------------------------------------------------*/
 
-    int celsius;
+    float celsius;
 
     printf("Digite a temperatura em graus Celsius: ");
-    scanf("%d", &celsius);
+    scanf("%f", &celsius);
 
     // ativa a suavização (antialiasing)
     SetConfigFlags(FLAG_MSAA_4X_HINT);
@@ -79,7 +79,7 @@ int main(void)
 
         // texto
         char textoCelsius[10];
-        sprintf(textoCelsius, "%d", celsius);
+        sprintf(textoCelsius, "%.2f °C", celsius);
         DrawText(textoCelsius, posicaoLinhaX - MeasureText(textoCelsius, 20) / 2, 230, 20, BLACK);
 
         /*----------------------------------------------------------------------

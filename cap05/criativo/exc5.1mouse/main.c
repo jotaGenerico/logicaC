@@ -3,87 +3,77 @@
  * @author Prof. Dr. David Buzatto
  * @brief Modelo para desenvolvimento de exercícios criativos usando a engine
  * de jogos Raylib (https://www.raylib.com/).
- * 
- * @copyright Copyright (c) 2024
+ * * @copyright Copyright (c) 2024
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
 #include <raylib.h>
 
 #define TAMANHO 3
-#define TAMANHO_CELULAS 200
 
+// Protótipos
 void mostrarTabuleiro(char tabuleiro[TAMANHO][TAMANHO]);
 int verificarVencedor(char tabuleiro[TAMANHO][TAMANHO], char jogador);
 int verificarEmpate(char tabuleiro[TAMANHO][TAMANHO]);
 void desenharTabuleiro(char tabuleiro[TAMANHO][TAMANHO]);
-void jogar();
 
+// Variáveis Globais
 char tabuleiro[TAMANHO][TAMANHO] = {
     {' ', ' ', ' '},
     {' ', ' ', ' '},
     {' ', ' ', ' '}
 };
 char jogadorAtual = 'X';
-int linha, coluna;
+bool fimDeJogo = false;
 
 int main( void ) {
 
     /*-----------------------------------------------------
      * A lógica inicial do seu programa deve vir aqui:
-     *     - declaração de variáveis;
-     *     - entrada de dados;
-     *     - processamentos adicionais.
+     * - declaração de variáveis;
+     * - entrada de dados;
+     * - processamentos adicionais.
      ----------------------------------------------------*/
 
-
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-        int mouseX = GetMouseX();
-        int mouseY = GetMouseY();
-
-        // Considera a margem ao calcular a coluna
-        if (mouseX >= 25 && mouseX <= 775) {
-            coluna = (mouseX - 25) / 250;
-            linha = mouseY / 200;
-
-            if (linha >= 0 && linha < TAMANHO && coluna >= 0 && coluna < TAMANHO && tabuleiro[linha][coluna] == ' ') {
-                tabuleiro[linha][coluna] = jogadorAtual;
-
-                if (verificarVencedor(tabuleiro, jogadorAtual)) {
-                    printf("Jogador %c vence!\n", jogadorAtual);
-                    // Reset or exit condition
-                }
-
-                if (verificarEmpate(tabuleiro)) {
-                    printf("Empate!\n");
-                    // Reset or exit condition
-                }
-
-                jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X';
-            }
-        }
-    }
-
-    
-    // ativa a suavização (antialiasing)
     SetConfigFlags( FLAG_MSAA_4X_HINT );
+    InitWindow( 800, 600, "Exercício Criativo 5.2 - Mouse" );
+    SetTargetFPS( 60 );
 
-    // cria uma janela de 800 pixels de largura por 600 de altura
-    InitWindow( 800, 600, "Título da Janela" );
-
-    // configura a quantidade de quatros por segundo da engine
-    SetTargetFPS( 60 );    
-
-    // enquanto não é sinalizado que a janela deve ser fechada
     while ( !WindowShouldClose() ) {
 
-        // inicia o processo de desenho
-        BeginDrawing();
+        /*----------------------------------------------------------------------
+         * Atualização da Lógica (Interação com a Matriz via Mouse)
+         ---------------------------------------------------------------------*/
 
-        // limpa a tela usando uma cor
+        if (!fimDeJogo && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            int mouseX = GetMouseX();
+            int mouseY = GetMouseY();
+
+            // Cálculo para mapear o clique na matriz (considerando a tua função desenharTabuleiro)
+            // Largura da célula: 250, Altura: 200, Margem: 25
+            if (mouseX >= 25 && mouseX <= 775) {
+                int coluna = (mouseX - 25) / 250;
+                int linha = mouseY / 200;
+
+                if (linha >= 0 && linha < TAMANHO && coluna >= 0 && coluna < TAMANHO) {
+                    if (tabuleiro[linha][coluna] == ' ') {
+                        tabuleiro[linha][coluna] = jogadorAtual;
+
+                        if (verificarVencedor(tabuleiro, jogadorAtual)) {
+                            fimDeJogo = true;
+                        } else if (verificarEmpate(tabuleiro)) {
+                            fimDeJogo = true;
+                        } else {
+                            jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X';
+                        }
+                    }
+                }
+            }
+        }
+
+        BeginDrawing();
         ClearBackground( WHITE );
 
         /*----------------------------------------------------------------------
@@ -92,81 +82,59 @@ int main( void ) {
 
         desenharTabuleiro(tabuleiro);
 
+        if (fimDeJogo) {
+            DrawText("FIM DE JOGO", 300, 550, 30, DARKGRAY);
+        }
+
         /*----------------------------------------------------------------------
          * A lógica do seu desenho deve terminar na linha acima.
          ---------------------------------------------------------------------*/
 
-        // termina o desenho
         EndDrawing();
-
     }
 
-    // fecha a janela
     CloseWindow();
     return 0;
-
 }
 
-
-void mostrarTabuleiro(char tabuleiro[TAMANHO][TAMANHO]) {
-    for (int i = 0; i < TAMANHO; i++) {
-        for (int j = 0; j < TAMANHO; j++) {
-            printf("%c ", tabuleiro[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-int verificarVencedor(char tabuleiro[TAMANHO][TAMANHO], char jogador) {
-    // Verificar linhas
-    for (int i = 0; i < TAMANHO; i++) {
-        if (tabuleiro[i][0] == jogador && tabuleiro[i][1] == jogador && tabuleiro[i][2] == jogador)
-            return 1;
-    }
-
-    // Verificar colunas
-    for (int j = 0; j < TAMANHO; j++) {
-        if (tabuleiro[0][j] == jogador && tabuleiro[1][j] == jogador && tabuleiro[2][j] == jogador)
-            return 1;
-    }
-
-    // Verificar diagonais
-    if (tabuleiro[0][0] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][2] == jogador)
-        return 1;
-    if (tabuleiro[0][2] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][0] == jogador)
-        return 1;
-
-    return 0;
-}
-
-int verificarEmpate(char tabuleiro[TAMANHO][TAMANHO]) {
-    for (int i = 0; i < TAMANHO; i++) {
-        for (int j = 0; j < TAMANHO; j++) {
-            if (tabuleiro[i][j] == ' ')
-                return 0;
-        }
-    }
-    return 1;
-}
+/*----------------------------------------------------------------------
+ * Funções de Lógica e Desenho
+ ---------------------------------------------------------------------*/
 
 void desenharTabuleiro(char tabuleiro[TAMANHO][TAMANHO]) {
     int largura = 250;
     int altura = 200;
     int margem = 25;
-    int tamanhoFonte = 120;
 
     for (int i = 0; i < TAMANHO; i++) {
         for (int j = 0; j < TAMANHO; j++) {
             Rectangle cellRect = { margem + j * largura, i * altura, largura, altura };
+            DrawRectangleLinesEx(cellRect, 2, BLACK);
 
-            DrawRectangleLinesEx(cellRect, 1, BLACK);
-
-            if (tabuleiro[i][j] == 'X') {
-                DrawText("X", cellRect.x + (largura / 2) - (tamanhoFonte / 2) + 10, cellRect.y + (altura / 2) - (tamanhoFonte / 2) + 10, tamanhoFonte, RED);
-            } else if (tabuleiro[i][j] == 'O') {
-                DrawText("O", cellRect.x + (largura / 2) - (tamanhoFonte / 2) + 10, cellRect.y + (altura / 2) - (tamanhoFonte / 2) + 10, tamanhoFonte, BLUE);
+            if (tabuleiro[i][j] != ' ') {
+                DrawText(TextFormat("%c", tabuleiro[i][j]),
+                         margem + j * largura + 80, i * altura + 40, 120,
+                         (tabuleiro[i][j] == 'X') ? RED : BLUE);
             }
         }
     }
 }
 
+int verificarVencedor(char tabuleiro[TAMANHO][TAMANHO], char jogador) {
+    for (int i = 0; i < TAMANHO; i++) {
+        if ((tabuleiro[i][0] == jogador && tabuleiro[i][1] == jogador && tabuleiro[i][2] == jogador) ||
+            (tabuleiro[0][i] == jogador && tabuleiro[1][i] == jogador && tabuleiro[2][i] == jogador))
+            return 1;
+    }
+    if ((tabuleiro[0][0] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][2] == jogador) ||
+        (tabuleiro[0][2] == jogador && tabuleiro[1][1] == jogador && tabuleiro[2][0] == jogador))
+        return 1;
+    return 0;
+}
+
+int verificarEmpate(char tabuleiro[TAMANHO][TAMANHO]) {
+    for (int i = 0; i < TAMANHO; i++)
+        for (int j = 0; j < TAMANHO; j++)
+            if (tabuleiro[i][j] == ' ') return 0;
+    return 1;
+}

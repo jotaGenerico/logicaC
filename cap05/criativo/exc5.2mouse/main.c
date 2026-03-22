@@ -74,16 +74,21 @@ int main( void ) {
         int colunaMouse = mousePos.x / CASAS;
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (pecaSelecionada.x == -1) {
-                if (tabuleiro[linhaMouse][colunaMouse] == jogadorAtual ||
-                    tabuleiro[linhaMouse][colunaMouse] == jogadorAtual + 1) {
-                    pecaSelecionada = (Vector2){linhaMouse, colunaMouse};
+            if (linhaMouse >= 0 && linhaMouse < TABULEIRO && colunaMouse >= 0 && colunaMouse < TABULEIRO) {
+                if (pecaSelecionada.x == -1) {
+                    if (tabuleiro[linhaMouse][colunaMouse] == jogadorAtual ||
+                        tabuleiro[linhaMouse][colunaMouse] == jogadorAtual + 1) {
+                        pecaSelecionada = (Vector2){linhaMouse, colunaMouse};
                     }
-            } else {
-                if (movimentoValido(pecaSelecionada.x, pecaSelecionada.y, linhaMouse, colunaMouse, jogadorAtual)) {
-                    fazerMovimento(pecaSelecionada.x, pecaSelecionada.y, linhaMouse, colunaMouse);
-                    jogadorAtual = (jogadorAtual == 1) ? 3 : 1;
+                } else {
+                    if (movimentoValido(pecaSelecionada.x, pecaSelecionada.y, linhaMouse, colunaMouse, jogadorAtual)) {
+                        fazerMovimento(pecaSelecionada.x, pecaSelecionada.y, linhaMouse, colunaMouse);
+                        jogadorAtual = (jogadorAtual == 1) ? 3 : 1;
+                    }
+                    pecaSelecionada = (Vector2){-1, -1};
+                    movimentoPossivel = (Vector2){-1, -1};
                 }
+            } else {
                 pecaSelecionada = (Vector2){-1, -1};
                 movimentoPossivel = (Vector2){-1, -1};
             }
@@ -91,8 +96,10 @@ int main( void ) {
 
         if (pecaSelecionada.x != -1) {
             movimentoPossivel = (Vector2){-1, -1};
-            if (movimentoValido(pecaSelecionada.x, pecaSelecionada.y, linhaMouse, colunaMouse, jogadorAtual)) {
-                movimentoPossivel = (Vector2){linhaMouse, colunaMouse};
+            if (linhaMouse >= 0 && linhaMouse < TABULEIRO && colunaMouse >= 0 && colunaMouse < TABULEIRO) {
+                if (movimentoValido(pecaSelecionada.x, pecaSelecionada.y, linhaMouse, colunaMouse, jogadorAtual)) {
+                    movimentoPossivel = (Vector2){linhaMouse, colunaMouse};
+                }
             }
         }
 
@@ -140,18 +147,24 @@ void DrawBoard() {
 }
 
 bool movimentoValido(int linhaOrigem, int colunaOrigem, int linhaDestino, int colunaDestino, int jogador) {
-    if (tabuleiro[linhaOrigem][colunaOrigem] != jogador && tabuleiro[linhaOrigem][colunaOrigem] != jogador + 1) return false;
+    if (linhaOrigem < 0 || linhaOrigem >= TABULEIRO || colunaOrigem < 0 || colunaOrigem >= TABULEIRO) return false;
+    if (linhaDestino < 0 || linhaDestino >= TABULEIRO || colunaDestino < 0 || colunaDestino >= TABULEIRO) return false;
+    
+    int peca = tabuleiro[linhaOrigem][colunaOrigem];
+    if (peca != jogador && peca != jogador + 1) return false;
     if (tabuleiro[linhaDestino][colunaDestino] != 0) return false;
+    
     int direcao = (jogador == 1) ? -1 : 1;
     int dLinha = linhaDestino - linhaOrigem;
     int dColuna = abs(colunaDestino - colunaOrigem);
+    bool isDama = (peca == jogador + 1);
 
     // Movimento normal
-    if (dLinha == direcao && dColuna == 1) return true;
+    if ((dLinha == direcao || (isDama && dLinha == -direcao)) && dColuna == 1) return true;
 
     // Movimento de captura
-    if (dLinha == 2 * direcao && dColuna == 2) {
-        int linhaCapturada = linhaOrigem + direcao;
+    if ((dLinha == 2 * direcao || (isDama && dLinha == -2 * direcao)) && dColuna == 2) {
+        int linhaCapturada = linhaOrigem + dLinha / 2;
         int colunaCapturada = (colunaDestino + colunaOrigem) / 2;
         int pecaCapturada = tabuleiro[linhaCapturada][colunaCapturada];
         return (pecaCapturada != 0 && pecaCapturada != jogador && pecaCapturada != jogador + 1);
@@ -173,8 +186,8 @@ void fazerMovimento(int linhaOrigem, int colunaOrigem, int linhaDestino, int col
 
     // Promoção a dama
     if (jogadorAtual == 1 && linhaDestino == 0) {
-        tabuleiro[linhaDestino][colunaDestino] = 2;
+        tabuleiro[linhaDestino][colunaDestino] = 2; // Dama branca (1 + 1)
     } else if (jogadorAtual == 3 && linhaDestino == TABULEIRO - 1) {
-        tabuleiro[linhaDestino][colunaDestino] = 6;
+        tabuleiro[linhaDestino][colunaDestino] = 4; // Dama preta (3 + 1)
     }
 }

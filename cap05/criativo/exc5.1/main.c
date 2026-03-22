@@ -6,6 +6,13 @@
  * 
  * @copyright Copyright (c) 2024
  */
+/**
+ * @file main.c
+ * @author Prof. Dr. David Buzatto
+ * @brief Modelo para desenvolvimento de exercícios criativos usando a engine
+ * de jogos Raylib (https://www.raylib.com/).
+ * * @copyright Copyright (c) 2024
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,21 +38,22 @@ int main( void ) {
 
     /*-----------------------------------------------------
      * A lógica inicial do seu programa deve vir aqui:
-     *     - declaração de variáveis;
-     *     - entrada de dados;
-     *     - processamentos adicionais.
+     * - declaração de variáveis;
+     * - entrada de dados;
+     * - processamentos adicionais.
      ----------------------------------------------------*/
 
+    // O exercício 5.1 pede a lógica via terminal antes da exibição
     jogar();
 
     // ativa a suavização (antialiasing)
     SetConfigFlags( FLAG_MSAA_4X_HINT );
 
     // cria uma janela de 800 pixels de largura por 600 de altura
-    InitWindow( 800, 600, "Título da Janela" );
+    InitWindow( 800, 600, "Exercício Criativo 5.1" );
 
     // configura a quantidade de quatros por segundo da engine
-    SetTargetFPS( 60 );    
+    SetTargetFPS( 60 );
 
     // enquanto não é sinalizado que a janela deve ser fechada
     while ( !WindowShouldClose() ) {
@@ -60,7 +68,22 @@ int main( void ) {
          * A lógica do seu desenho deve vir aqui.
          ---------------------------------------------------------------------*/
 
-        mostrarTabuleiro(tabuleiro);
+        // Desenha as linhas do tabuleiro na janela
+        DrawLine( 300, 100, 300, 400, BLACK );
+        DrawLine( 400, 100, 400, 400, BLACK );
+        DrawLine( 200, 200, 500, 200, BLACK );
+        DrawLine( 200, 300, 500, 300, BLACK );
+
+        // Percorre a matriz e desenha os caracteres na tela
+        for ( int i = 0; i < TAMANHO; i++ ) {
+            for ( int j = 0; j < TAMANHO; j++ ) {
+                if ( tabuleiro[i][j] != ' ' ) {
+                    DrawText( TextFormat("%c", tabuleiro[i][j]),
+                              235 + (j * 100), 120 + (i * 100), 80,
+                              (tabuleiro[i][j] == 'X') ? RED : BLUE );
+                }
+            }
+        }
 
         /*----------------------------------------------------------------------
          * A lógica do seu desenho deve terminar na linha acima.
@@ -128,7 +151,11 @@ void jogar() {
     while (!fimDeJogo) {
         mostrarTabuleiro(tabuleiro);
         printf("Jogador %c, entre com a linha e coluna (0-2) separadas por espaço: ", jogadorAtual);
-        scanf("%d %d", &linha, &coluna);
+
+        if (scanf("%d %d", &linha, &coluna) != 2) {
+            while(getchar() != '\n'); // limpa buffer em caso de erro
+            continue;
+        }
 
         if (linha >= 0 && linha < TAMANHO && coluna >= 0 && coluna < TAMANHO && tabuleiro[linha][coluna] == ' ') {
             tabuleiro[linha][coluna] = jogadorAtual;
@@ -149,4 +176,3 @@ void jogar() {
         }
     }
 }
-
