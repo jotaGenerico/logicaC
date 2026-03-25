@@ -78,15 +78,26 @@ void drawAxes(void) {
 }
 
 void drawFunction(double a, double b, double c) {
+    int prevScreenX = -1;
+    int prevScreenY = -1;
     for (int x = -SCREEN_WIDTH / 2; x < SCREEN_WIDTH / 2; x++) {
         double realX = (double)x / GRAPH_SCALE;
         double y = a * realX * realX + b * realX + c;
+        int screenX = x + SCREEN_WIDTH / 2;
         int screenY = SCREEN_HEIGHT / 2 - (int)(y * GRAPH_SCALE);
-        DrawPixel(x + SCREEN_WIDTH / 2, screenY, RED);
+        
+        if (prevScreenX != -1) {
+            DrawLine(prevScreenX, prevScreenY, screenX, screenY, RED);
+        }
+        
+        prevScreenX = screenX;
+        prevScreenY = screenY;
     }
 }
 
 void drawPoints(double a, double b, double c, double x1, double x2, double vertexX, double vertexY) {
+    (void) a;
+    (void) b;
     if (!isnan(x1)) {
         DrawCircle(SCREEN_WIDTH / 2 + (int)(x1 * GRAPH_SCALE), SCREEN_HEIGHT / 2, 5, BLUE);
         DrawCircle(SCREEN_WIDTH / 2 + (int)(x2 * GRAPH_SCALE), SCREEN_HEIGHT / 2, 5, BLUE);

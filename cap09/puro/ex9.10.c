@@ -13,8 +13,7 @@ int main(void){
     printf("Frase: ");
     fgets(frase, T, stdin);
     frase[strcspn(frase, "\n")] = '\0';
-    
-        
+
     printf("%d caractere(s)!\n", tamanho(frase));
 
     return 0;
